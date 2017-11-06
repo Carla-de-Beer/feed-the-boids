@@ -5,3 +5,10 @@ Evolutionary steering game based on Daniel Shiffman's Coding Train video: https:
 * Click on the screen to create more food, mess with evolution and create a new fittest boid.
 
 To view this project, navigate to: https://carla-de-beer.github.io/Feed-the-Boids/index.html
+
+Built with P5js and RequireJS.
+
+</br>
+<p align="center">
+  <img src="images/screenShot.png"/>
+</p>
