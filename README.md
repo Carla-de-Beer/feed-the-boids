@@ -1,4 +1,4 @@
-# Feed-the-Boids
+# Feed the Boids
 [![GitHub issues](https://img.shields.io/github/issues/Carla-de-Beer/Feed-the-Boids.svg?style=flat-square)](https://github.com/Carla-de-Beer/Feed-the-Boids/issues)
 
 Evolutionary steering game based on Daniel Shiffman's Coding Train video: https://www.youtube.com/watch?v=qzFlnX-z38U
