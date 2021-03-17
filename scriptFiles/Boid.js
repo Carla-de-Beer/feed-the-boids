@@ -135,8 +135,8 @@ define(["sketch", "../libraries/p5"],
 			this.clone = function() {
 				var p = sketch.p;
 
-				if (p.random(1) < 0.002) {
-					return new p5.Boid(this.position.x, this.position.y, this.dna);
+				if (sketch.maxNumBoids >sketch.numBoids && p.random(1) < 0.002) {
+					return new p5.Boid(p.random(p.width), p.random(p.height), this.dna);
 				} else return null;
 			};
 

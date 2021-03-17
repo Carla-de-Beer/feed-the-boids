@@ -16,6 +16,7 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.numBoids = 0;
 		sketch.start = new Date();
 		sketch.gameOver = false;
+		sketch.maxNumBoids = 150;
 
 		return sketch;
 
