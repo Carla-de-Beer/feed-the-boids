@@ -7,7 +7,7 @@ define(["sketch", "../libraries/p5", "./p5.dom"],
 
 			p.setup = function() {
 				var canvas = p.createCanvas(270, 80);
-				canvas.position(40, 630);
+				canvas.position(window.innerWidth-270, window.innerHeight-80);
 				textCol = p.color(255, 220);
 			};
 

@@ -8,7 +8,7 @@ define(["../libraries/p5", "./p5.dom"],
 		});
 
 		// Shared global variables
-		sketch.debug = true;
+		sketch.debug = false;
 		sketch.healthValue = 0;
 		sketch.margin = 50;
 		sketch.numFood= 0;
@@ -16,7 +16,10 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.numBoids = 0;
 		sketch.start = new Date();
 		sketch.gameOver = false;
-		sketch.maxNumBoids = 150;
+		sketch.maxNumBoids = 75;
+		sketch.numSmallBoids = [];
+		sketch.numMediumBoids = [];
+		sketch.numLargeBoids = [];
 
 		return sketch;
 

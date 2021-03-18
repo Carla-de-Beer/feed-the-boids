@@ -6,7 +6,7 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 			var boids = [];
 			var food = [];
 			var poison = [];
-			var bestBoid = -1;
+			var bestHealth = 0;
 			var oldestBoid = -1;
 			var foodCol, poisonCol;
 			var margin = sketch.margin;
@@ -14,23 +14,23 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 			p.setup = function() {
 				var p = sketch.p;
 
-				var canvas = p.createCanvas(window.innerWidth - 360, 600);
-				canvas.position(325, 110);
+				var canvas = p.createCanvas(window.innerWidth-275, window.innerHeight);
+				canvas.position(0, 0);
 
-				for (var i = 0; i < 10; ++i) {
+				for (var i = 0; i < 50; ++i) {
 					boids[i] = new Boid(p.random(p.width), p.random(p.height));
 				}
 
-				for (var i = 0; i < 20; ++i) {
-					var x = p.random(margin, p.width - margin);
-					var y = p.random(margin, p.height - margin);
-					food.push(p.createVector(x, y));
+				for (var i = 0; i < 100; ++i) {
+					let x = p.random(margin, p.width - margin);
+					let y = p.random(margin, p.height - margin);
+					food.push({position : p.createVector(x, y)});
 				}
 
-				for (var i = 0; i < 10; ++i) {
-					x = p.random(margin, p.width - margin);
-					y = p.random(margin, p.height - margin);
-					poison.push(new Star(x, y, 1.5, 9, 3));
+				for (var i = 0; i < 200; ++i) {
+					let x = p.random(margin, p.width - margin);
+					let y = p.random(margin, p.height - margin);
+					poison.push({position : new Star(x, y, 1.5, 9, 3)});
 				}
 
 				foodCol = p.color(0, 255, 0);
@@ -44,59 +44,124 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				p.fill(255);
 				p.noStroke();
 
-				if (p.random(1) < 0.1) {
-					x = p.random(margin, p.width - margin);
-					y = p.random(margin, p.height - margin);
-					food.push(p.createVector(x, y));
+				var smallBoids = [];
+				var mediumBoids = [];
+				var largeBoids = [];
+
+				for (var i = 0; i < boids.length; ++i) {
+					var health = boids[i].health;
+					if(health>2){
+						largeBoids.push(boids[i]);
+					} else if(health>1){
+						mediumBoids.push(boids[i]);
+					} else {
+						smallBoids.push(boids[i]);
+					}
+				}		
+
+				if (smallBoids.length<sketch.maxNumBoids/3) {
+					smallBoids.push(new Boid(p.random(p.width), p.random(p.height)));
 				}
 
-				if (p.random(1) < 0.01) {
-					var x = p.random(margin, p.width - margin);
-					var y = p.random(margin, p.height - margin);
-					poison.push(new Star(x, y, 1.5, 9, 3));
+				if (food.length < Math.min((smallBoids.length)*7,50)) {
+					let x = p.random(margin, p.width - margin);
+					let y = p.random(margin, p.height - margin);
+					food.push({position : p.createVector(x, y)});
+				}
+
+				if (poison.length<200) {
+					let x = p.random(margin, p.width - margin);
+					let y = p.random(margin, p.height - margin);
+					poison.push({position : new Star(x, y, 1.5, 9, 3)});
 				}
 
 				for (var i = 0; i < food.length; ++i) {
 					p.fill(foodCol);
 					p.noStroke();
-					p.ellipse(food[i].x, food[i].y, 5, 5);
+					p.ellipse(food[i].position.x, food[i].position.y, 5, 5);
 				}
 
 				for (var i = 0; i < poison.length; ++i) {
 					p.fill(poisonCol);
 					p.noStroke();
-					poison[i].show();
-				}
-
-				// Call the appropriate steering behaviours for our agents
-				for (var i = boids.length-1; i >= 0; --i) {
-					boids[i].boundaries();
-					boids[i].behaviours(food, poison);
-					boids[i].update();
-					if (bestBoid === i) {
-						boids[i].display(true);
-					} else {
-						boids[i].display(false);
-					}
-
-					var newBoid = boids[i].clone();
-					if (newBoid !== null) {
-						boids.push(newBoid);
-					}
-
-					if (boids[i].dead()) {
-						food.push(p.createVector(boids[i].position.x, boids[i].position.y));
-						boids.splice(i, 1);
-					}
-				}
-
-				var bestHealth = 0;
+					poison[i].position.show();
+				}		
+				
+				bestHealth =0;
 				for (var i = 0; i < boids.length; ++i) {
 					if (boids[i].health > bestHealth) {
 						bestHealth = boids[i].health;
-						bestBoid = i;
 					}
 				}
+				// Call the appropriate steering behaviours for our agents
+				for (var i = smallBoids.length-1; i >= 0; --i) {
+					smallBoids[i].boundaries();
+					smallBoids[i].behaviours(food, poison);
+					smallBoids[i].update();
+					if (smallBoids[i].health === bestHealth) {
+						smallBoids[i].display(true);
+					} else {
+						smallBoids[i].display(false);
+					}
+
+					var newBoid = smallBoids[i].clone();
+					if (newBoid !== null) {
+						smallBoids.push(newBoid);
+					}
+
+					if (smallBoids[i].dead()) {
+						let x = p.random(margin, p.width - margin);
+						let y = p.random(margin, p.height - margin);
+						food.push({position : p.createVector(x, y)});
+						smallBoids.splice(i, 1);
+					}
+				}
+				for (var i = mediumBoids.length-1; i >= 0; --i) {
+					mediumBoids[i].boundaries();
+					mediumBoids[i].behaviours(food, poison);
+					mediumBoids[i].update();
+					if (mediumBoids[i].health === bestHealth) {
+						mediumBoids[i].display(true);
+					} else {
+						mediumBoids[i].display(false);
+					}
+
+					var newBoid = mediumBoids[i].clone();
+					if (newBoid !== null) {
+						smallBoids.push(newBoid);
+					}
+
+					if (mediumBoids[i].dead()) {
+						let x = p.random(margin, p.width - margin);
+						let y = p.random(margin, p.height - margin);
+						food.push({position : p.createVector(x, y)});
+						mediumBoids.splice(i, 1);
+					}
+				}
+				for (var i = largeBoids.length-1; i >= 0; --i) {
+					largeBoids[i].boundaries();
+					largeBoids[i].behaviours(smallBoids, poison);
+					largeBoids[i].update();
+					if (largeBoids[i].health === bestHealth) {
+						largeBoids[i].display(true);
+					} else {
+						largeBoids[i].display(false);
+					}
+
+					var newBoid = largeBoids[i].clone();
+					if (newBoid !== null) {
+						smallBoids.push(newBoid);
+					}
+
+					if (largeBoids[i].dead()) {
+						let x = p.random(margin, p.width - margin);
+						let y = p.random(margin, p.height - margin);
+						food.push({position : p.createVector(x, y)});
+						largeBoids.splice(i, 1);
+					}
+				}
+
+				boids = smallBoids.concat(mediumBoids, largeBoids);
 
 				var longestMills = 0;
 				var currentMillis = (new Date).getTime();
@@ -112,21 +177,16 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				sketch.numFood = food.length;
 				sketch.numPoison = poison.length;
 				sketch.numBoids = boids.length;
+				sketch.numSmallBoids = smallBoids.length;
+				sketch.numMediumBoids = mediumBoids.length;
+				sketch.numLargeBoids = largeBoids.length;
 
-				if (sketch.numBoids === 0) {
-					p.background(70);
-					p.textFont("Courier");
-					p.textSize(25);
-					p.fill(255, 200);
-					p.text("Game over!", p.width/2.43, p.height * 0.5 - 10);
-					sketch.gameOver = true;
-					p.noLoop();
-				}
 			};
 
 			p.mousePressed = function() {
-				// Need to transpose the mouseX value to sit correctly relative to the screen
-				food.push(p.createVector(p.mouseX - 280, p.mouseY));
+				let x = p.winMouseX;
+				let y = p.winMouseY;
+				food.push({position : p.createVector(x, y)});
 			};
 
 			p.keyReleased = function() {

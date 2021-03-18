@@ -11,11 +11,11 @@ define(["Star", "sketch", "../libraries/p5", "./p5.dom"],
 
 		new p5(function(p) {
 			p.setup = function() {
-				var canvas = p.createCanvas(270, 505);
-				canvas.position(40, 110);
+				var canvas = p.createCanvas(270, window.innerHeight-85);
+				canvas.position(window.innerWidth-270, 0);
 
 				foodCol = p.color(0, 255, 0);
-				poisonCol = p.color(250, 65, 65);
+				poisonCol = p.color(65, 65, 255);
 				textCol = p.color(255, 220);
 			};
 
