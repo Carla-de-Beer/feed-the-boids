@@ -8,13 +8,12 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 			var poison = [];
 			var bestHealth = 0;
 			var oldestBoid = -1;
-			var foodCol, poisonCol;
 			var margin = sketch.margin;
 
 			p.setup = function() {
 				var p = sketch.p;
 
-				var canvas = p.createCanvas(window.innerWidth-275, window.innerHeight);
+				var canvas = p.createCanvas(window.innerWidth, window.innerHeight);
 				canvas.position(0, 0);
 
 				for (var i = 0; i < 50; ++i) {
@@ -32,9 +31,6 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					let y = p.random(margin, p.height - margin);
 					poison.push({position : new Star(x, y, 1.5, 9, 3)});
 				}
-
-				foodCol = p.color(0, 255, 0);
-				poisonCol = p.color(250, 65, 65);
 			};
 
 			p.draw = function() {
@@ -76,13 +72,13 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				}
 
 				for (var i = 0; i < food.length; ++i) {
-					p.fill(foodCol);
+					p.fill(sketch.foodCol);
 					p.noStroke();
 					p.ellipse(food[i].position.x, food[i].position.y, 5, 5);
 				}
 
 				for (var i = 0; i < poison.length; ++i) {
-					p.fill(poisonCol);
+					p.fill(sketch.poisonCol);
 					p.noStroke();
 					poison[i].position.show();
 				}		
@@ -182,6 +178,11 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				sketch.numLargeBoids = largeBoids.length;
 
 			};
+
+			window.onresize = function(){
+				var p = sketch.p
+				p.resizeCanvas(window.innerWidth, window.innerHeight);
+			}
 
 			p.mousePressed = function() {
 				let x = p.winMouseX;

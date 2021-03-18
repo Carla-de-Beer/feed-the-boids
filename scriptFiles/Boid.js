@@ -6,13 +6,10 @@ define(["sketch", "../libraries/p5"],
 		var poisonMinus = -0.2;
 		var mutationRate = 0.1;
 		var frameMinus = 0.0005;
-		var foodCol, poisonCol;
 		var margin = sketch.margin;
 		var p = sketch.p;
 
 		return p5.Boid = function(x, y, dna) {
-			foodCol = p.color(0, 255, 0);
-			poisonCol = p.color(255, 0, 0);
 
 			this.acceleration = p.createVector(0, 0);
 			this.velocity = p.createVector(0, -2);
@@ -188,7 +185,7 @@ define(["sketch", "../libraries/p5"],
 					} else {
 						p.noFill();
 					}
-					p.stroke(foodCol);
+					p.stroke(sketch.foodCol);
 					p.line(0, 0, 0, -this.dna[0] * 25);
 					p.strokeWeight(0.7);
 					p.ellipse(0, 0, this.dna[2] * 2);
@@ -202,8 +199,8 @@ define(["sketch", "../libraries/p5"],
 					p.stroke(255);
 				}
 
-				var gr = p.color(0, 255, 0);
-				var rd = p.color(255, 0, 0);
+				var gr = sketch.foodCol;
+				var rd = sketch.poisonCol;
 				var col = p.lerpColor(rd, gr, this.health);
 
 				p.fill(col);

@@ -8,7 +8,7 @@
 // Based on Daniel Shiffman's Coding Train video example:
 // https://www.youtube.com/watch?v=qzFlnX-z38U
 
-require(["mainCanvas", "legendCanvas", "counterCanvas", "../libraries/p5", "./p5.dom"],
+require(["mainCanvas", "../libraries/p5", "./p5.dom"],
 	function() {
 		"use strict";
 
