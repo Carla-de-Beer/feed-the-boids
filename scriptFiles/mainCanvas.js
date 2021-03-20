@@ -37,8 +37,18 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				p.noStroke();
 				sketch.numFood = food.length;
 				sketch.numBoids = boids.length;
-
 				let smallBoids = boids.filter(boid => boid.health<sketch.HealthUntilStopEatingFood/2).length;
+
+				p.textAlign(p.RIGHT);
+				let y = 15;
+				p.text("Max number of boids: "+Math.floor(sketch.maxNumBoids), window.innerWidth-5,y);
+				y += 15;
+				p.text("Number of boids: "+sketch.numBoids, window.innerWidth-5,y);
+				y += 15;
+				p.text("Number of small boids: "+smallBoids, window.innerWidth-5,y);
+				y += 15;
+				p.text("Number of food: "+sketch.numBoids, window.innerWidth-5,y);
+
 
 				var longestMills = 0;
 				var currentMillis = (new Date).getTime();
@@ -94,7 +104,7 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					}
 				}
 
-				if (sketch.maxNumBoids/2 < boids.length &&
+				if (sketch.maxNumBoids/2 >= boids.length &&
 					(smallBoids<boids.length/10 || boids.length<sketch.maxNumBoids/20)) {
 					boids.push(new Boid(p.random(p.width), p.random(p.height)));
 				}

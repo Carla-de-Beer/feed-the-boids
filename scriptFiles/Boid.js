@@ -28,7 +28,7 @@ define(["sketch", "../libraries/p5"],
 				// Fear weight
 				this.dna[1] = p.random(-2, 1);
 				// perception
-				this.dna[2] = p.random(sketch.minNumFood, sketch.maxNumBoids);
+				this.dna[2] = p.random(Math.min(10,sketch.minNumFood), Math.min(100,sketch.maxNumBoids));
 			} else {
 				this.dna[0] = dna[0];
 				this.dna[1] = dna[1];
@@ -47,12 +47,13 @@ define(["sketch", "../libraries/p5"],
 
 			// Method to update location
 			this.update = function() {
+				this.maxspeed = this.health**0.125 + 1;
 				this.health -= frameMinus;
 				this.hunger -= frameMinus*10;
 				// Update velocity
 				this.velocity.add(this.acceleration);
 				// Limit speed
-				this.velocity.limit(Math.max(this.maxspeed,this.health));
+				this.velocity.limit(this.maxspeed);
 				this.position.add(this.velocity);
 				// Reset acceleration to 0 each cycle
 				this.acceleration.mult(0);
@@ -81,9 +82,9 @@ define(["sketch", "../libraries/p5"],
 
 				if (desired !== null) {
 					desired.normalize();
-					desired.mult(Math.max(this.maxspeed,this.health));
+					desired.mult(this.maxspeed);
 					var steer = p5.Vector.sub(desired, this.velocity);
-					steer.limit(Math.max(this.maxforce,this.health/4));
+					steer.limit(this.maxforce);
 					this.applyForce(steer);
 				}
 			};
@@ -219,7 +220,7 @@ define(["sketch", "../libraries/p5"],
 				// Steering = Desired minus velocity
 				var steer = p5.Vector.sub(desired, this.velocity);
 				// Limit to maximum steering force
-				steer.limit(Math.max(this.maxforce,this.health/4));
+				steer.limit(this.maxforce);
 
 				return steer;
 			};
