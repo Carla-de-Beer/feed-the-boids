@@ -28,7 +28,7 @@ define(["sketch", "../libraries/p5"],
 				// Fear weight
 				this.dna[1] = p.random(-2, 1);
 				// perception
-				this.dna[2] = p.random(5, 50);
+				this.dna[2] = p.random(sketch.minNumFood, sketch.maxNumBoids);
 			} else {
 				this.dna[0] = dna[0];
 				this.dna[1] = dna[1];
@@ -195,7 +195,7 @@ define(["sketch", "../libraries/p5"],
 			this.clone = function() {
 				var p = sketch.p;
 
-				if (sketch.maxNumBoids > sketch.numBoids && p.random(1) < 0.0005) {
+				if (p.random(1) < 0.0005) {
 					return new p5.Boid(p.random(p.width), p.random(p.height), this.dna);
 				} else return null;
 			};
@@ -228,7 +228,7 @@ define(["sketch", "../libraries/p5"],
 				// Draw a triangle rotated in the direction of velocity
 				var theta = this.velocity.heading() + p.PI/2;
 				let sizeFromHealth = Math.sqrt(this.health) + 0.3;
-				sizeFromHealth = Math.sqrt(sizeFromHealth);
+				sizeFromHealth = sizeFromHealth*0.7;
 
 				p.push();
 				if (sketch.debug || isBest) {

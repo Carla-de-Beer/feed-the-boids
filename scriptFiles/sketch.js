@@ -22,7 +22,6 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.numBoids = 0;
 		sketch.start = new Date();
 		sketch.gameOver = false;
-		sketch.maxNumBoids = 20;
 
 		// Shared global variables
 		sketch.foodCol = sketch.p.color(0, 255, 0);

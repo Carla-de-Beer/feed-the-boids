@@ -35,6 +35,8 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				p.background(70);
 				p.fill(255);
 				p.noStroke();
+				sketch.numFood = food.length;
+				sketch.numBoids = boids.length;
 
 				let smallBoids = boids.filter(boid => boid.health<sketch.HealthUntilStopEatingFood/2).length;
 
@@ -51,11 +53,6 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 						bestHealth = boids[i].health;
 						biggestBoid = i;
 					}
-				}
-
-				if (sketch.maxNumBoids < boids.length &&
-					(smallBoids<boids.length/10 || boids.length<sketch.maxNumBoids/20)) {
-					boids.push(new Boid(p.random(p.width), p.random(p.height)));
 				}
 
 				if (food.length < Math.min(sketch.maxFood,Math.max(smallBoids*4,sketch.minNumFood))) {
@@ -82,12 +79,13 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					} else {
 						boids[i].display(false);
 					}
-
-					var newBoid = boids[i].clone();
-					if (newBoid !== null) {
-						boids.push(newBoid);
+					if (sketch.maxNumBoids < sketch.numBoids)
+					{
+						var newBoid = boids[i].clone();
+						if (newBoid !== null) {
+							boids.push(newBoid);
+						}
 					}
-
 					if (boids[i].dead()) {
 						let x = p.random(margin, p.width - margin);
 						let y = p.random(margin, p.height - margin);
@@ -95,8 +93,12 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 						boids.splice(i, 1);
 					}
 				}
-				sketch.numFood = food.length;
-				sketch.numBoids = boids.length;
+
+				if (sketch.maxNumBoids/2 < boids.length &&
+					(smallBoids<boids.length/10 || boids.length<sketch.maxNumBoids/20)) {
+					boids.push(new Boid(p.random(p.width), p.random(p.height)));
+				}
+				
 			};
 
 			window.onresize = function(){
