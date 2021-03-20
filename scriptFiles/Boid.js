@@ -178,6 +178,7 @@ define(["sketch", "../libraries/p5"],
 						list.splice(i, 1);
 						this.health += nutrition;
 						this.hunger += nutrition;
+						return p.createVector(0, 0);
 					} else {
 						if (d < record && d < perception) {
 							record = d;

@@ -70,11 +70,8 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					let y = p.random(margin, p.height - margin);
 					food.push({position : p.createVector(x, y)});
 				}
-				if( p.mouseIsPressed && p.random(1)<0.33){
-					let x = p.winMouseX;
-					let y = p.winMouseY;
-					food.push({position : p.createVector(x, y)});
-				}
+
+
 				for (var i = 0; i < food.length; ++i) {
 					p.fill(sketch.foodCol);
 					p.noStroke();
@@ -107,6 +104,23 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				if (sketch.maxNumBoids/2 >= boids.length &&
 					(smallBoids<boids.length/10 || boids.length<sketch.maxNumBoids/20)) {
 					boids.push(new Boid(p.random(p.width), p.random(p.height)));
+				}
+				if( p.mouseIsPressed && p.random(1)<0.33){
+					let x = p.winMouseX;
+					let y = p.winMouseY;
+					if (p.mouseButton === p.LEFT){
+							food.push({position : p.createVector(x, y)});
+					} else if(p.mouseButton === p.RIGHT){
+						for (var i = food.length-1; i >= 0; --i) {
+							var d = p.dist(x, y, food[i].position.x, food[i].position.y);
+		
+							if (d < 50) {
+								food.splice(i, 1);
+							}
+						}
+					} else {
+						boids.push(new Boid(x, y));
+					}
 				}
 				
 			};
