@@ -224,7 +224,12 @@ define(["sketch", "../libraries/p5"],
 				return steer;
 			};
 
-			this.drawFish = (theta, sizeFromHealth, isBest) => {
+			this.display = function(isBest) {
+				// Draw a triangle rotated in the direction of velocity
+				var theta = this.velocity.heading() + p.PI/2;
+				let sizeFromHealth = Math.sqrt(this.health) + 0.3;
+				sizeFromHealth = Math.sqrt(sizeFromHealth);
+
 				p.push();
 				p.translate(this.position.x, this.position.y);
 				p.rotate(theta);
@@ -259,13 +264,6 @@ define(["sketch", "../libraries/p5"],
 				p.vertex(this.r * sizeFromHealth, this.r * 2 * sizeFromHealth);
 				p.endShape(p.CLOSE);
 				p.pop();
-			}
-
-			this.display = function(isBest) {
-				// Draw a triangle rotated in the direction of velocity
-				var theta = this.velocity.heading() + p.PI/2;
-				let sizeFromHealth = Math.sqrt(this.health) + 0.3;
-				sizeFromHealth = Math.sqrt(theta, sizeFromHealth, isBest);
 			};
 		}
 
