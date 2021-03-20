@@ -6,6 +6,7 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 			var boids = [];
 			var food = [];
 			var oldestBoid = -1;
+			var biggestBoid = -1;
 			var margin = sketch.margin;
 
 			p.setup = function() {
@@ -39,15 +40,21 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 
 				var longestMills = 0;
 				var currentMillis = (new Date).getTime();
+				var bestHealth = 0;
 				for (var i = 0; i < boids.length; ++i) {
 					var millis = currentMillis - boids[i].millis;
 					if (millis > longestMills) {
 						longestMills = millis;
 						oldestBoid = i;
 					}
+					if(boids[i].health > bestHealth){
+						bestHealth = boids[i].health;
+						biggestBoid = i;
+					}
 				}
 
-				if (smallBoids<boids.length/10 || boids.length<sketch.maxNumBoids/20) {
+				if (sketch.maxNumBoids < boids.length &&
+					(smallBoids<boids.length/10 || boids.length<sketch.maxNumBoids/20)) {
 					boids.push(new Boid(p.random(p.width), p.random(p.height)));
 				}
 
@@ -67,16 +74,10 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					p.ellipse(food[i].position.x, food[i].position.y, 5, 5);
 				}
 				for (var i = boids.length-1; i >= 0; --i) {
-					let temp = boids[i];
 					boids[i].boundaries();
 					boids[i].behaviours(food, boids);
-					if (boids[i]===undefined){
-						console.log(boids[i]);
-						console.log(i);
-						console.log(temp);
-					}
 					boids[i].update();
-					if (i=== oldestBoid) {
+					if (i=== oldestBoid || i===biggestBoid) {
 						boids[i].display(true);
 					} else {
 						boids[i].display(false);

@@ -231,6 +231,9 @@ define(["sketch", "../libraries/p5"],
 				sizeFromHealth = Math.sqrt(sizeFromHealth);
 
 				p.push();
+				if (sketch.debug || isBest) {
+					p.text(this.health.toFixed(2),this.position.x-15, this.position.y-15);
+				}
 				p.translate(this.position.x, this.position.y);
 				p.rotate(theta);
 				const rd = p.color(255,0,0);
