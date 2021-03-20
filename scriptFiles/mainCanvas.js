@@ -47,7 +47,7 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				y += 15;
 				p.text("Number of small boids: "+smallBoids, window.innerWidth-5,y);
 				y += 15;
-				p.text("Number of food: "+sketch.numBoids, window.innerWidth-5,y);
+				p.text("Number of food: "+sketch.numFood, window.innerWidth-5,y);
 
 
 				var longestMills = 0;
