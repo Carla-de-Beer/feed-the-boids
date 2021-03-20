@@ -86,7 +86,7 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					} else {
 						boids[i].display(false);
 					}
-					if (sketch.maxNumBoids < sketch.numBoids)
+					if (sketch.maxNumBoids > sketch.numBoids)
 					{
 						var newBoid = boids[i].clone();
 						if (newBoid !== null) {
