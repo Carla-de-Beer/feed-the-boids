@@ -245,14 +245,15 @@ define(["sketch", "../libraries/p5"],
 				if (sketch.debug || isBest) {
 					p.noFill();
 					p.stroke(sketch.foodCol);
+					p.strokeWeight(1);
 					p.line(0, 0, 0, -this.dna[0] * 25);
-					p.strokeWeight(0.7);
-					p.ellipse(0, 0, this.dna[2] * 2);
 					p.stroke(this.color);
-					p.strokeWeight(0.7);
-					p.ellipse(0, 0, this.dna[2] * 6);
+					p.strokeWeight(0.5);
+					p.ellipse(0, 0, this.dna[2] * 2);
+					
 
 					p.stroke(rd);
+					p.strokeWeight(1.2);
 					p.line(0, 0, 0, -this.dna[1] * 25);
 					p.strokeWeight(1);
 					p.stroke(255);
