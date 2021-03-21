@@ -11,9 +11,9 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.maxFood = sketch.maxNumBoids;
 		sketch.minNumFood = sketch.maxNumBoids/10;
 
-		sketch.HealthUntilStopEatingFood = 2;
-		sketch.HungerToEat = 0.9;
-		sketch.eatHealthToSelfRatio = 0.5;
+		sketch.HealthUntilStopEatingFood = 4;
+		sketch.HungerToEat = 0.95;
+		sketch.eatHealthToSelfRatio = 0.33;
 
 		sketch.debug = false;
 		sketch.healthValue = 0;
@@ -24,7 +24,7 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.gameOver = false;
 
 		// Shared global variables
-		sketch.foodCol = p.color(0, 255, 0);
+		sketch.foodCol = sketch.p.color(0, 255, 0);
 
 		sketch.canvasArea = 1;
 
