@@ -29,6 +29,8 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				}
 			};
 
+			
+
 			p.draw = function() {
 				var p = sketch.p;
 
@@ -37,19 +39,23 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				p.noStroke();
 				sketch.numFood = food.length;
 				sketch.numBoids = boids.length;
-				let smallBoids = boids.filter(boid => boid.health<sketch.HealthUntilStopEatingFood/2).length;
+				var smallBoids = boids.filter(boid => boid.health<sketch.HealthUntilStopEatingFood/2).length;
 
-				p.textAlign(p.RIGHT);
-				let y = 15;
-				p.text("Max number of boids: "+Math.floor(sketch.maxNumBoids), window.innerWidth-5,y);
-				y += 15;
-				p.text("Number of boids: "+sketch.numBoids, window.innerWidth-5,y);
-				y += 15;
-				p.text("Number of small boids: "+smallBoids, window.innerWidth-5,y);
-				y += 15;
-				p.text("Number of food: "+sketch.numFood, window.innerWidth-5,y);
-
-
+				var modeMap = {};
+				var maxEl = boids[0].color, maxCount = 1;
+				for(var i = 0; i < boids.length; i++)
+				{
+					var el = boids[i].color;
+					if(modeMap[el] == null)
+						modeMap[el] = 1;
+					else
+						modeMap[el]++;  
+					if(modeMap[el] > maxCount)
+					{
+						maxEl = el;
+						maxCount = modeMap[el];
+					}
+				}
 				var longestMills = 0;
 				var currentMillis = (new Date).getTime();
 				var bestHealth = 0;
@@ -65,6 +71,29 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					}
 				}
 
+				p.push();
+				p.textAlign(p.RIGHT);
+				let y = 15;
+				p.text("Max number of boids: "+Math.floor(sketch.maxNumBoids), window.innerWidth-5,y);
+				y += 15;
+				p.text("Number of boids: "+sketch.numBoids, window.innerWidth-5,y);
+				y += 15;
+				p.text("Number of small boids: "+smallBoids, window.innerWidth-5,y);
+				y += 15;
+				p.text("Number of food: "+sketch.numFood, window.innerWidth-5,y);
+				y+= 15;
+				p.text("Number of species = "+Object.keys(modeMap).length, window.innerWidth-5,y);
+				y+= 15;
+				p.fill(maxEl);
+				p.text("Best specie have N = "+maxCount, window.innerWidth-5,y);
+				y+= 15;
+				p.fill(boids[oldestBoid].color);
+				p.text("Oldest boid health= "+boids[oldestBoid].health.toFixed(2), window.innerWidth-5,y);
+				y+= 15;
+				p.fill(boids[biggestBoid].color);
+				p.text("Best boid health= "+boids[biggestBoid].health.toFixed(2), window.innerWidth-5,y);
+				p.pop();
+
 				if (food.length < Math.min(sketch.maxFood,Math.max(smallBoids*4,sketch.minNumFood))) {
 					let x = p.random(margin, p.width - margin);
 					let y = p.random(margin, p.height - margin);
@@ -77,11 +106,12 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 					p.noStroke();
 					p.ellipse(food[i].position.x, food[i].position.y, 5, 5);
 				}
+
 				for (var i = boids.length-1; i >= 0; --i) {
 					boids[i].boundaries();
 					boids[i].behaviours(food, boids);
 					boids[i].update();
-					if (i=== oldestBoid || i===biggestBoid) {
+					if (boids[i].color.toString() == maxEl.toString()) {
 						boids[i].display(true);
 					} else {
 						boids[i].display(false);
@@ -108,7 +138,7 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				if( p.mouseIsPressed && p.random(1)<0.33){
 					let x = p.winMouseX;
 					let y = p.winMouseY;
-					if (p.mouseButton === p.LEFT){
+					if (p.mouseButton === p.CENTER){
 							food.push({position : p.createVector(x, y)});
 					} else if(p.mouseButton === p.RIGHT){
 						for (var i = food.length-1; i >= 0; --i) {
@@ -118,11 +148,11 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 								food.splice(i, 1);
 							}
 						}
-					} else {
+					} else if(p.mouseButton === p.LEFT){
 						boids.push(new Boid(x, y));
 					}
 				}
-				
+
 			};
 
 			window.onresize = function(){
@@ -130,6 +160,10 @@ define(["Boid", "Star", "sketch", "../libraries/p5", "./p5.dom"],
 				p.resizeCanvas(window.innerWidth, window.innerHeight);
 				sketch.canvasArea = window.innerWidth*window.innerHeight;
 				sketch.setMinMaxs(sketch.canvasArea);
+			}
+
+			document.oncontextmenu = function() {
+				return false;
 			}
 
 			p.keyReleased = function() {

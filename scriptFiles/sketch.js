@@ -12,7 +12,7 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.minNumFood = sketch.maxNumBoids/10;
 
 		sketch.HealthUntilStopEatingFood = 2;
-		sketch.HungerToEat = 1;
+		sketch.HungerToEat = 0.9;
 		sketch.eatHealthToSelfRatio = 0.5;
 
 		sketch.debug = false;
