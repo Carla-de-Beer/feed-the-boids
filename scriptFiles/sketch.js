@@ -24,7 +24,7 @@ define(["../libraries/p5", "./p5.dom"],
 		sketch.gameOver = false;
 
 		// Shared global variables
-		sketch.foodCol = sketch.p.color(0, 255, 0);
+		sketch.foodCol = p.color(0, 255, 0);
 
 		sketch.canvasArea = 1;
 
