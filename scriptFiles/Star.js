@@ -16,7 +16,7 @@ define(["sketch", "../libraries/p5"],
 
 			this.show = function() {
 				p.noStroke();
-				p.fill(255, 0, 0);
+				p.fill(sketch.poisonCol);
 				p.beginShape();
 				for (var a = 0; a < p.TWO_PI; a += angle) {
 					var sx = x + Math.cos(a) * this.radius2;
